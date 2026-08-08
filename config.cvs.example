@@ -17,13 +17,13 @@ wifissid,data,string,myssid
 wifipass,data,string,mypass
 
 # Stratum server URL – mining pool or stratum proxy
-stratumurl,data,string,public-pool.io
+stratumurl,data,string,pool.opensourceminers.de
 
 # Stratum port – usually defined by your pool (default varies)
 stratumport,data,u16,3333
 
 # Stratum username – usually your wallet address + optional worker ID
-stratumuser,data,string,bc1q7n70rumyv6lvu8avpml0c3uggvssfu52egum3q.nerdqaxe
+stratumuser,data,string,bc1q2k6v6twun90y6fvqcw5jylu94x8y897wl9z2j8.nerdqaxe
 
 # Stratum password – often just "x"
 stratumpass,data,string,x
@@ -40,7 +40,7 @@ stratumdiff,data,u64,1000
 #fbstratumport,data,u16,21496
 
 # Fallback Stratum user – can match primary or use a backup worker ID
-#fbstratumuser,data,string,bc1q7n70rumyv6lvu8avpml0c3uggvssfu52egum3q.backupaxe
+#fbstratumuser,data,string,bc1q2k6v6twun90y6fvqcw5jylu94x8y897wl9z2j8.backupaxe
 
 # Fallback Stratum password – usually same as primary
 #fbstratumpass,data,string,x
