@@ -124,11 +124,32 @@ $nb-themes: nb-register-theme((
 
   select-min-width: 6rem,
 
-  slide-out-background: linear-gradient(270deg, #222b45 0%, #151a30 100%),
-  slide-out-shadow-color: 0 4px 14px 0 #8f9bb3,
-  slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
-  gauge-bg: #304562,
+  slide-out-background: linear-gradient(270deg, #161b22 0%, #0d1117 100%),
+  slide-out-shadow-color: 0 4px 14px 0 #010409,
+  slide-out-shadow-color-rtl: 0 4px 14px 0 #010409,
+  gauge-bg: #30363d,
   gauge-value-color: #f7931a,
+
+  // GitHub-artige Neutraltöne statt Nebular-Blaugrau
+  color-basic-100: #e6edf3,
+  color-basic-200: #c9d1d9,
+  color-basic-300: #b1bac4,
+  color-basic-400: #8b949e,
+  color-basic-500: #6e7681,
+  color-basic-600: #484f58,
+  color-basic-700: #30363d,
+  color-basic-800: #161b22,
+  color-basic-900: #10151b,
+  color-basic-1000: #0d1117,
+  color-basic-1100: #010409,
+  color-basic-transparent-100: rgba(110, 118, 129, 0.08),
+  color-basic-transparent-200: rgba(110, 118, 129, 0.16),
+  color-basic-transparent-300: rgba(110, 118, 129, 0.24),
+  color-basic-transparent-400: rgba(110, 118, 129, 0.32),
+  color-basic-transparent-500: rgba(110, 118, 129, 0.4),
+  color-basic-transparent-600: rgba(110, 118, 129, 0.48),
+  border-basic-color-3: #21262d,
+  border-basic-color-4: #30363d,
 
   // OSM-Branding: Orange als Primärfarbe
   color-primary-100: #ffefd9,
