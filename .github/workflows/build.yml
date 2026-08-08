@@ -8,6 +8,9 @@ on:
         type: boolean
         default: false
 
+permissions:
+  contents: write
+
 jobs:
   ca-bundle-test:
     runs-on: ubuntu-latest
