@@ -1,7 +1,9 @@
 name: Build and Release ESP32 Firmware
 
 on:
-  workflow_dispatch:  # Manual trigger only
+  workflow_dispatch:  # Manual trigger
+  release:
+    types: [released]  # Build and attach binaries when a release is published
 
 jobs:
   build-and-release:
