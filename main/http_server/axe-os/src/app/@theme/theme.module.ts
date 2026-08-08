@@ -120,7 +120,7 @@ const PIPES = [
         providers: [
           ...NbThemeModule.forRoot(
             {
-              name: 'cosmic',
+              name: 'dark',
             },
             [ CORPORATE_THEME, GAIA_THEME ],
           ).providers || [],
