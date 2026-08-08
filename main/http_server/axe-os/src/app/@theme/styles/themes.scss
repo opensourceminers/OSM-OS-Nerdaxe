@@ -29,7 +29,24 @@ $nb-themes: nb-register-theme((
   slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
 
   gauge-bg: #c0c0c0,
-  gauge-value-color: #2d8ad7,
+  gauge-value-color: #f7931a,
+
+  // OSM-Branding: Orange als Primärfarbe
+  color-primary-100: #ffefd9,
+  color-primary-200: #ffdcb0,
+  color-primary-300: #ffc487,
+  color-primary-400: #fcab52,
+  color-primary-500: #f7931a,
+  color-primary-600: #d97a10,
+  color-primary-700: #b45f08,
+  color-primary-800: #8f4a05,
+  color-primary-900: #6b3703,
+  color-primary-transparent-100: rgba(247, 147, 26, 0.08),
+  color-primary-transparent-200: rgba(247, 147, 26, 0.16),
+  color-primary-transparent-300: rgba(247, 147, 26, 0.24),
+  color-primary-transparent-400: rgba(247, 147, 26, 0.32),
+  color-primary-transparent-500: rgba(247, 147, 26, 0.4),
+  color-primary-transparent-600: rgba(247, 147, 26, 0.48),
 ), default, default);
 
 $nb-themes: nb-register-theme((
@@ -111,6 +128,23 @@ $nb-themes: nb-register-theme((
   slide-out-shadow-color: 0 4px 14px 0 #8f9bb3,
   slide-out-shadow-color-rtl: 0 4px 14px 0 #8f9bb3,
   gauge-bg: #304562,
-  gauge-value-color: #64B5F6,
+  gauge-value-color: #f7931a,
+
+  // OSM-Branding: Orange als Primärfarbe
+  color-primary-100: #ffefd9,
+  color-primary-200: #ffdcb0,
+  color-primary-300: #ffc487,
+  color-primary-400: #fcab52,
+  color-primary-500: #f7931a,
+  color-primary-600: #d97a10,
+  color-primary-700: #b45f08,
+  color-primary-800: #8f4a05,
+  color-primary-900: #6b3703,
+  color-primary-transparent-100: rgba(247, 147, 26, 0.08),
+  color-primary-transparent-200: rgba(247, 147, 26, 0.16),
+  color-primary-transparent-300: rgba(247, 147, 26, 0.24),
+  color-primary-transparent-400: rgba(247, 147, 26, 0.32),
+  color-primary-transparent-500: rgba(247, 147, 26, 0.4),
+  color-primary-transparent-600: rgba(247, 147, 26, 0.48),
 
 ), dark, dark);

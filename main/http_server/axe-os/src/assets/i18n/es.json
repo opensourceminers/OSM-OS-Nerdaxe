@@ -479,7 +479,7 @@
     "TITLE": "AYUDA"
   },
   "FOOTER": {
-    "POWERED_BY": "Desarrollado por <a href=\"https://github.com/akveo/ngx-admin\" target=\"_blank\">ngx-admin</a> y <a href=\"https://akveo.github.io/nebular\" target=\"_blank\">Nebular</a>."
+    "POWERED_BY": "Powered by <a href=\"https://opensourceminers.de\" target=\"_blank\">Opensourceminers.de</a>"
   },
   "UNITS": {
     "HASHRATE": "Gh/s",
