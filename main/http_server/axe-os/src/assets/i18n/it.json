@@ -397,6 +397,8 @@
     "STEP_ERROR": "Errore",
     "STEP_UNKNOWN": "Sconosciuto",
     "RELEASE_AND_UPDATE": "Versione e aggiornamento",
+    "RELEASE_AND_UPDATE_OSM": "Release & Update OSM",
+    "RELEASE_AND_UPDATE_OFFICIAL": "Release & Update NerdOS (ufficiale)",
     "EXPECTED_FILE": "File previsto",
     "SELECT_RELEASE": "Seleziona versione",
     "FILENAME": "Nome file",
