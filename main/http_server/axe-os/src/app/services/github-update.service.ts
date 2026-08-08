@@ -36,21 +36,26 @@ export enum UpdateStatus {
   UNKNOWN = 'unknown'
 }
 
+/** Update channels: OSM fork releases or official upstream releases */
+export type UpdateRepo = 'osm' | 'official';
+
 @Injectable({
   providedIn: 'root'
 })
 export class GithubUpdateService {
 
-  private readonly baseReleasesUrl =
-    'https://api.github.com/repos/shufps/ESP-Miner-NerdQAxePlus/releases';
+  private readonly repoReleaseUrls: Record<UpdateRepo, string> = {
+    osm: 'https://api.github.com/repos/opensourceminers/OSM-OS-Nerdaxe/releases',
+    official: 'https://api.github.com/repos/shufps/ESP-Miner-NerdQAxePlus/releases',
+  };
 
   constructor(
     private httpClient: HttpClient
   ) { }
 
   /** Fetch a single page of releases */
-  private fetchReleasePage(page: number, perPage = 50): Observable<GithubRelease[]> {
-    const url = `${this.baseReleasesUrl}?per_page=${perPage}&page=${page}`;
+  private fetchReleasePage(repo: UpdateRepo, page: number, perPage = 50): Observable<GithubRelease[]> {
+    const url = `${this.repoReleaseUrls[repo]}?per_page=${perPage}&page=${page}`;
     return this.httpClient.get<GithubRelease[]>(url);
   }
 
@@ -59,6 +64,7 @@ export class GithubUpdateService {
    * at least `targetCount` items or there are no more pages.
    */
   private loadReleasesOfType(
+    repo: UpdateRepo,
     includePrereleases: boolean,
     targetCount = 10,
     maxPages = 10,
@@ -73,7 +79,7 @@ export class GithubUpdateService {
     const matchesType = includePrereleases ? isPre : isStable;
 
     // start with page 1
-    return this.fetchReleasePage(1, perPage).pipe(
+    return this.fetchReleasePage(repo, 1, perPage).pipe(
       expand((releases, index) => {
         const nextPage = index + 2; // index starts at 0 (page 1)
         const isLastPage = releases.length < perPage;
@@ -83,7 +89,7 @@ export class GithubUpdateService {
           return EMPTY;
         }
 
-        return this.fetchReleasePage(nextPage, perPage);
+        return this.fetchReleasePage(repo, nextPage, perPage);
       }),
       // accumulate only matching releases
       scan((acc, releases) => {
@@ -107,12 +113,12 @@ export class GithubUpdateService {
    * Es werden mehrere Seiten geladen, bis genug Releases vom gewünschten Typ
    * gefunden wurden oder keine Releases mehr da sind.
    */
-  public getReleases(includePrereleases = false): Observable<GithubRelease[]> {
+  public getReleases(includePrereleases = false, repo: UpdateRepo = 'osm'): Observable<GithubRelease[]> {
     const latest$ = this.httpClient.get<GithubRelease>(
-      `${this.baseReleasesUrl}/latest`
+      `${this.repoReleaseUrls[repo]}/latest`
     );
 
-    const selected$ = this.loadReleasesOfType(includePrereleases, 10, 10, 50);
+    const selected$ = this.loadReleasesOfType(repo, includePrereleases, 10, 10, 50);
 
     return selected$.pipe(
       switchMap((releases: GithubRelease[]) =>
