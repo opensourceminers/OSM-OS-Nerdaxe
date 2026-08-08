@@ -45,7 +45,7 @@ public:
     uint32_t m_vrFrequency;
     uint32_t m_defaultVrFrequency;
     bool m_hasHashCounter;
-    const char *m_defaultTheme = "cosmic";
+    const char *m_defaultTheme = "dark";
 
     // Index 0: ASIC/chip-temp PID (fan 0).  Index 1: VR-temp PID (fan 1).
     // ch1 base defaults (overridden in subclass ctors where needed): 65°C, p=6, i=0.1, d=10.

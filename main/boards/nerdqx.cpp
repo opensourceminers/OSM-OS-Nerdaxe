@@ -71,7 +71,7 @@ NerdQX::NerdQX() : NerdQaxePlus2() {
 #endif
 
     m_swarmColorName = "#7300e7";
-    m_defaultTheme = "default"; // light theme
+    m_defaultTheme = "dark";
     m_vrFrequency = m_defaultVrFrequency = 35000;
 }
 

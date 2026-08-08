@@ -1,6 +1,20 @@
 import { NbJSThemeOptions, DARK_THEME as baseTheme } from '@nebular/theme';
 
-const baseThemeVariables = baseTheme.variables;
+// OSM: GitHub-artige Neutraltöne + Orange als Basisfarbe für die Charts
+const baseThemeVariables = {
+  ...baseTheme.variables,
+  primary: '#f7931a',
+  bg: '#161b22',
+  bg2: '#10151b',
+  bg3: '#0d1117',
+  bg4: '#010409',
+  border: '#161b22',
+  border2: '#21262d',
+  border3: '#30363d',
+  border4: '#30363d',
+  border5: '#484f58',
+  separator: '#21262d',
+};
 
 export const DARK_THEME = {
   name: 'dark',
