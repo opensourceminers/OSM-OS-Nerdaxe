@@ -70,6 +70,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         submodules: recursive
+        fetch-depth: 0
 
     # Started from a tag ("Use workflow from" -> Tags), the tag is the version and
     # the release target. Started from a branch, the newest tag reachable from the
