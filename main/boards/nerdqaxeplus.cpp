@@ -56,7 +56,7 @@ NerdQaxePlus::NerdQaxePlus() : Board() {
     m_minCurrentA = 0.0f;
     m_maxCurrentA = 6.0f;
 
-    m_pidSettings[0].targetTemp = 55;
+    m_pidSettings[0].targetTemp = 60;
     m_pidSettings[0].p = 600; //   6.00
     m_pidSettings[0].i = 10;  //   0.10
     m_pidSettings[0].d = 1000; // 10.00

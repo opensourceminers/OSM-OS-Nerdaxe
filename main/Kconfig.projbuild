@@ -30,7 +30,7 @@ menu "Miner Configuration"
 
     choice
         prompt "Fan speed control mode"
-        default FAN_MODE_MANUAL
+        default FAN_MODE_PID
         help
             Select how the firmware controls the fan speed.
 

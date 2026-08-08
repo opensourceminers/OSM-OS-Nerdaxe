@@ -2,7 +2,7 @@ menu "WiFi Configuration"
 
     config ESP_WIFI_SSID
         string "WiFi SSID"
-        default "myssid"
+        default "IOT"
         help
             SSID (network name) for the example to connect to.
 
