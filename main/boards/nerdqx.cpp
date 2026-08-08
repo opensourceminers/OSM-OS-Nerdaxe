@@ -48,7 +48,7 @@ NerdQX::NerdQX() : NerdQaxePlus2() {
     m_absMaxAsicVoltageMillis = decode_m_absMaxAsicVoltageMillis(m_imax);
     m_initVoltageMillis = m_defaultAsicVoltageMillis;
 
-    m_pidSettings[0].targetTemp = 58;
+    m_pidSettings[0].targetTemp = 60;
     m_pidSettings[0].p = 600;  //  6.00
     m_pidSettings[0].i = 10;   //  0.10
     m_pidSettings[0].d = 1000; // 10.00
