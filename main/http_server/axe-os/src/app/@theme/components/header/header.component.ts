@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     { value: 'dark',    name: 'Dark' },
   ];
 
-  currentTheme = 'cosmic';  // Default theme if none is found in localStorage
+  currentTheme = 'dark';  // Default theme if none is found in localStorage
   logoPath: string = '';    // Resolved logo path for the template
   logoFailed: boolean = false;
   deviceModel: string = 'default'; // Fallback device model
@@ -99,7 +99,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.applyTheme(backendTheme);
       } else if (!savedTheme) {
         // 3) Final fallback
-        this.applyTheme('cosmic');
+        this.applyTheme('dark');
       }
 
       // Finalize bootstrap: now we can safely set logo and persist theme (once)
@@ -111,7 +111,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }, _err => {
       // Backend not responding, use fallback theme and try legacy logo scheme
       if (!savedTheme) {
-        this.applyTheme('cosmic');
+        this.applyTheme('dark');
       }
       this.bootstrapping = false;
       this.updateLogo();
@@ -189,7 +189,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.logoFailed = false;
     // Choose logo variant based on theme ("default" is the light theme in Nebular).
     const logoVariant = this.currentTheme === 'default' ? 'light' : 'dark';
-    this.logoPath = `/assets/${this.deviceModel}_${logoVariant}.png`;
+    this.logoPath = `/assets/osm_${logoVariant}.svg`;
   }
 
   // --- Helpers for theme resolution ---
