@@ -5,6 +5,9 @@ on:
   release:
     types: [released]  # Build and attach binaries when a release is published
 
+permissions:
+  contents: write
+
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
