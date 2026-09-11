@@ -11,7 +11,7 @@ main,namespace,,
 hostname,data,string,OSM-Miner
 
 # Wi-Fi SSID – name of your wireless network
-wifissid,data,string,myssid
+wifissid,data,string,IOT
 
 # Wi-Fi password – yep, plain text (use secure provisioning if possible!)
 wifipass,data,string,mypass
