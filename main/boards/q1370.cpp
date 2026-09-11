@@ -41,7 +41,7 @@ Q1370B::Q1370B() : NerdQaxePlus()
     m_absMaxAsicVoltageMillis = 1400;
     m_initVoltageMillis = 1200;
 
-    m_pidSettings[0].targetTemp = 55;
+    m_pidSettings[0].targetTemp = 60;
     m_pidSettings[0].p = 600; //   6.00
     m_pidSettings[0].i = 10;  //   0.10
     m_pidSettings[0].d = 1000; // 10.00

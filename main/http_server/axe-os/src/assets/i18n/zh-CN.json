@@ -395,6 +395,8 @@
     "STEP_ERROR": "错误",
     "STEP_UNKNOWN": "未知",
     "RELEASE_AND_UPDATE": "发布与更新",
+    "RELEASE_AND_UPDATE_OSM": "Release & Update OSM",
+    "RELEASE_AND_UPDATE_OFFICIAL": "Release & Update NerdOS (官方)",
     "EXPECTED_FILE": "预期文件",
     "SELECT_RELEASE": "选择发布版本",
     "FILENAME": "文件名",
@@ -508,7 +510,7 @@
     "TITLE": "帮助"
   },
   "FOOTER": {
-    "POWERED_BY": "基于 <a href=\"https://github.com/akveo/ngx-admin\" target=\"_blank\">ngx-admin</a> 和 <a href=\"https://akveo.github.io/nebular\" target=\"_blank\">Nebular</a> 构建。"
+    "POWERED_BY": "Powered by <a href=\"https://opensourceminers.de\" target=\"_blank\">Opensourceminers.de</a>"
   },
   "UNITS": {
     "HASHRATE": "GH/s",
