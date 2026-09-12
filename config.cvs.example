@@ -17,7 +17,7 @@ wifissid,data,string,IOT
 wifipass,data,string,mypass
 
 # Stratum server URL – mining pool or stratum proxy
-stratumurl,data,string,pool.opensourceminers.de
+stratumurl,data,string,stratum.bitaxe.de
 
 # Stratum port – usually defined by your pool (default varies)
 stratumport,data,u16,3333
