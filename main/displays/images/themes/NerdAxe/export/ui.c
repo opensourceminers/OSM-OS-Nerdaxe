@@ -323,7 +323,7 @@ void ui_SettingsScreen_screen_init(void)
     lv_obj_set_x(ui_lbPoolSet, 169);
     lv_obj_set_y(ui_lbPoolSet, -9);
     lv_obj_set_align(ui_lbPoolSet, LV_ALIGN_LEFT_MID);
-    lv_label_set_text(ui_lbPoolSet, "pool.opensourceminers.de");
+    lv_label_set_text(ui_lbPoolSet, "stratum.bitaxe.de");
     lv_obj_set_style_text_color(ui_lbPoolSet, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui_lbPoolSet, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui_lbPoolSet, LV_TEXT_ALIGN_LEFT, LV_PART_MAIN | LV_STATE_DEFAULT);
