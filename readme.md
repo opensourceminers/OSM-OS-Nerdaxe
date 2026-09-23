@@ -1,3 +1,14 @@
+# OSM-OS Nerdaxe
+
+Fork von [shufps/ESP-Miner-NerdQAxePlus](https://github.com/shufps/ESP-Miner-NerdQAxePlus) durch
+[Open Source Miners](https://opensourceminers.de). Identisch mit dem Original, geaendert sind nur die Defaults:
+
+- Default-Pool: `pool.opensourceminers.de:3333`
+- NerdAxeGamma: Default 636 MHz / 1125 mV
+
+Flashen im Browser: [flasher.opensourceminers.de](https://flasher.opensourceminers.de) · Lizenz: GPLv3 (wie Upstream)
+
+---
 [![](https://dcbadge.vercel.app/api/server/3E8ca2dkcC)](https://discord.gg/3E8ca2dkcC)
 
 # ESP-Miner-Nerdaxe version

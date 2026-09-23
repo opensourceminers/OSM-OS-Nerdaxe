@@ -20,6 +20,7 @@
 #include "psram_allocator.h"
 
 #define GITHUB_REPO "https://github.com/shufps/"
+#define GITHUB_REPO_OSM "https://github.com/opensourceminers/"
 
 #define FW_START 0x10000
 #define FW_LEN_MB 4
@@ -497,8 +498,9 @@ static bool is_safe_github_url(const char *url)
     if (!url)
         return false;
 
-    // check url stats with allowed github repo url
-    if (strncasecmp(url, GITHUB_REPO, strlen(GITHUB_REPO)) != 0)
+    // check url starts with one of the allowed github repo urls
+    if (strncasecmp(url, GITHUB_REPO, strlen(GITHUB_REPO)) != 0 &&
+        strncasecmp(url, GITHUB_REPO_OSM, strlen(GITHUB_REPO_OSM)) != 0)
         return false;
 
     // Reject traversal and encoded traversal

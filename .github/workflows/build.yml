@@ -1,12 +1,17 @@
 name: Build and Release ESP32 Firmware
 
 on:
+  release:
+    types: [released]  # Build and attach binaries when a release is published
   workflow_dispatch:  # Manual trigger only
     inputs:
       enable_coredump:
         description: 'Diagnostic build: panic core dump capture + download endpoint. Only published to pre-releases (fails for a stable release); otherwise artifacts only. The dump can leak WiFi/pool credentials to anyone on the LAN unless OTP is enabled on the device.'
         type: boolean
         default: false
+
+permissions:
+  contents: write
 
 jobs:
   build-and-release:
@@ -16,48 +21,16 @@ jobs:
     strategy:
       matrix:
         include:
-          - board: NERDQAXEPLUS
-            upload_www: true
-            label: NerdQAxe+
-          - board: NERDOCTAXEPLUS
-            upload_www: false
-            label: NerdOCTAXE+
-          - board: NERDQAXEPLUS2
-            upload_www: false
-            label: NerdQAxe++
-          - board: NERDAXE
-            upload_www: false
-            label: NerdAxe
-          - board: NERDOCTAXEGAMMA
-            upload_www: false
-            label: NerdOCTAXE-Gamma
-          - board: NERDAXEGAMMA
-            upload_www: false
-            label: NerdAxeGamma
           - board: NERDAXEGAIA
-            upload_www: false
+            upload_www: true
             label: NerdAxeGaia
-          - board: NERDHAXEGAMMA
-            upload_www: false
-            label: NerdHaxe-Gamma
-          - board: NERDEKO
-            upload_www: false
-            label: NerdEKO
-          - board: NERDQX
-            upload_www: false
-            label: NerdQX
-          - board: Q1370
-            upload_www: false
-            label: Q1370
-          - board: Q1373
-            upload_www: false
-            label: Q1373
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
         submodules: recursive
+        fetch-depth: 0
 
     - name: Get Version Tag
       id: version_tag
@@ -229,7 +202,7 @@ jobs:
 
     - name: Upload to Existing Release
       if: env.RELEASE_EXISTS == 'true' && env.PUBLISH == 'true'
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2.4.2
       with:
         files: ${{ env.files }}
         tag_name: ${{ env.VERSION_TAG }}

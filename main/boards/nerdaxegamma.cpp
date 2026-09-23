@@ -27,9 +27,9 @@ NerdaxeGamma::NerdaxeGamma() : NerdAxe() {
     m_asicCount = 1;
 
     m_asicJobIntervalMs = 1500;
-    m_asicFrequencies = {500, 515, 525, 550, 575};
+    m_asicFrequencies = {500, 515, 525, 550, 575, 650};
     m_asicVoltages = {1120, 1130, 1140, 1150, 1160, 1170, 1180, 1190, 1200};
-    m_defaultAsicFrequency = m_asicFrequency = 515;
+    m_defaultAsicFrequency = m_asicFrequency = 650;
     m_defaultAsicVoltageMillis = m_asicVoltageMillis = 1150;
     // m_absMaxAsicFrequency = 750;
     // m_absMaxAsicVoltageMillis = 1300;
