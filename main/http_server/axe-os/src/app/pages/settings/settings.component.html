@@ -21,14 +21,14 @@ Web-UI: {{ currentWebVersion }}<br/>
   </nb-card-body>
 </nb-card>
 
-<!-- Flex container for the update cards -->
+<!-- Flex container for the update cards: OSM | official | legacy -->
 <div class="cards-container">
-  <!-- Single "Release & Update" Card -->
-  <nb-card class="card-item version-card">
+  <nb-card class="card-item version-card" *ngFor="let ch of channels">
     <nb-card-header>
       <div class="version-header">
-        <span>{{ 'UPDATE.RELEASE_AND_UPDATE' | translate }}</span>
-        <nb-badge [status]="getStatusBadgeColor()" [text]="getStatusTranslationKey() | translate" position="top right">
+        <span>{{ ch.titleKey | translate }}</span>
+        <nb-badge *ngIf="ch.key === 'osm'" [status]="getStatusBadgeColor()"
+          [text]="getStatusTranslationKey() | translate" position="top right">
         </nb-badge>
       </div>
     </nb-card-header>
@@ -45,16 +45,15 @@ Web-UI: {{ currentWebVersion }}<br/>
 
       <hr style="border-color: var(--card-divider-color); margin: 20px 0; opacity:1.0;" />
 
-      <!-- Row: Selector + prerelease toggle -->
       <!-- Row: Selector -->
       <div class="release-row">
         <div class="release-select">
           <label class="release-label">
             <strong>{{ 'UPDATE.SELECT_RELEASE' | translate }}:</strong>
           </label>
-          <nb-select [selected]="selectedRelease?.id" (selectedChange)="onSelectReleaseId($event)"
+          <nb-select [selected]="ch.selectedRelease?.id" (selectedChange)="onSelectReleaseId(ch, $event)"
             placeholder="Select release" [disabled]="isOneClickUpdate">
-            <nb-option *ngFor="let r of (releases$ | async) ?? []; let i = index" [value]="r.id">
+            <nb-option *ngFor="let r of (ch.releases$ | async) ?? []; let i = index" [value]="r.id">
               {{ getReleaseLabel(r, i) }}
             </nb-option>
           </nb-select>
@@ -63,31 +62,31 @@ Web-UI: {{ currentWebVersion }}<br/>
 
       <!-- Row: Prerelease checkbox -->
       <div class="release-checkbox-row">
-        <nb-checkbox class="prerelease-toggle" [formControl]="includePrereleasesCtrl" [disabled]="isOneClickUpdate">
+        <nb-checkbox class="prerelease-toggle" [formControl]="ch.includePrereleasesCtrl" [disabled]="isOneClickUpdate">
           {{ 'UPDATE.SHOW_PRERELEASES' | translate }}
         </nb-checkbox>
       </div>
 
 
       <!-- Meta of selected release -->
-      <div class="version-info" *ngIf="selectedRelease">
+      <div class="version-info" *ngIf="ch.selectedRelease">
         <div class="version-row">
           <strong>{{ 'UPDATE.PUBLISHED' | translate }}:</strong>
-          <span>{{ selectedRelease.published_at | date }}</span>
+          <span>{{ ch.selectedRelease.published_at | date }}</span>
         </div>
-        <div class="version-row" *ngIf="expectedFactoryFilename">
+        <div class="version-row" *ngIf="ch.expectedFactoryFilename">
           <strong>{{ 'UPDATE.FILENAME' | translate }}:</strong>
-          <span>{{ expectedFactoryFilename }}</span>
+          <span>{{ ch.expectedFactoryFilename }}</span>
         </div>
       </div>
 
       <!-- Changelog -->
-      <div class="changelog-section" *ngIf="selectedRelease">
-        <button nbButton ghost size="small" (click)="toggleChangelog()">
-          <nb-icon [icon]="showChangelog ? 'chevron-up-outline' : 'chevron-down-outline'" pack="eva"></nb-icon>
-          {{ showChangelog ? ('UPDATE.HIDE_CHANGELOG' | translate) : ('UPDATE.SHOW_CHANGELOG' | translate) }}
+      <div class="changelog-section" *ngIf="ch.selectedRelease">
+        <button nbButton ghost size="small" (click)="toggleChangelog(ch)">
+          <nb-icon [icon]="ch.showChangelog ? 'chevron-up-outline' : 'chevron-down-outline'" pack="eva"></nb-icon>
+          {{ ch.showChangelog ? ('UPDATE.HIDE_CHANGELOG' | translate) : ('UPDATE.SHOW_CHANGELOG' | translate) }}
         </button>
-        <div *ngIf="showChangelog" class="changelog-content" [innerHTML]="changelog"></div>
+        <div *ngIf="ch.showChangelog" class="changelog-content" [innerHTML]="ch.changelog"></div>
       </div>
 
       <hr style="border-color: var(--card-divider-color); margin: 20px 0; opacity:1.0;" />
@@ -96,8 +95,9 @@ Web-UI: {{ currentWebVersion }}<br/>
       <div class="update-section">
         <div class="d-flex align-items-center justify-content-between mt-2">
           <button nbButton [status]="updateStatus === UpdateStatus.UPDATE_AVAILABLE ? 'warning' : 'primary'"
-            size="small" [nbSpinner]="isOneClickUpdate" [disabled]="isOneClickUpdate || !selectedRelease"
-            (click)="directUpdateFromGithub()">
+            size="small" [nbSpinner]="isOneClickUpdate && activeChannelKey === ch.key"
+            [disabled]="isOneClickUpdate || !ch.selectedRelease"
+            (click)="directUpdateFromGithub(ch)">
             <nb-icon icon="cloud-download-outline" pack="eva"></nb-icon>&nbsp;
             {{ 'UPDATE.INSTALL_FROM_GITHUB' | translate }}
           </button>
@@ -108,7 +108,7 @@ Web-UI: {{ currentWebVersion }}<br/>
         </div>
       </div>
 
-      <div class="progress-wrapper" *ngIf="isOneClickUpdate">
+      <div class="progress-wrapper" *ngIf="isOneClickUpdate && activeChannelKey === ch.key">
         <nb-progress-bar [value]="otaProgress" [status]="otaProgress >= 100 ? 'success' : 'info'" [displayValue]="false"
           size="large">
         </nb-progress-bar>

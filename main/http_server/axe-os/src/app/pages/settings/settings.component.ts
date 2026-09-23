@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { combineLatest, map, Observable, catchError, of, shareReplay, startWith, Subscription, interval } from 'rxjs';
 import { switchMap, tap, take } from 'rxjs/operators';
-import { GithubUpdateService, UpdateStatus, VersionComparison, GithubRelease } from '../../services/github-update.service';
+import { GithubUpdateService, UpdateStatus, VersionComparison, GithubRelease, UpdateRepo } from '../../services/github-update.service';
 import { LoadingService } from '../../services/loading.service';
 import { SystemService } from '../../services/system.service';
 import { eASICModel } from '../../models/enum/eASICModel';
@@ -13,6 +13,18 @@ import { IUpdateStatus } from 'src/app/models/IUpdateStatus';
 import { OtpAuthService, EnsureOtpResult, EnsureOtpOptions } from '../../services/otp-auth.service';
 import { ISettingsV2 } from '../../models/ISettingsV2';
 import { getAppVersion } from 'src/app/app.module';
+
+/** One GitHub-based update channel (OSM fork or official upstream) */
+interface UpdateChannel {
+  key: UpdateRepo;
+  titleKey: string;
+  includePrereleasesCtrl: FormControl<boolean | null>;
+  releases$?: Observable<GithubRelease[]>;
+  selectedRelease: GithubRelease | null;
+  expectedFactoryFilename: string;
+  showChangelog: boolean;
+  changelog: string;
+}
 
 @Component({
   selector: 'app-settings',
@@ -35,7 +47,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
   public asicModel!: eASICModel;
 
   public expectedFileName: string = "";
-  public expectedFactoryFilename: string = "";
 
   public selectedFirmwareFile: File | null = null;
   public selectedWebsiteFile: File | null = null;
@@ -55,8 +66,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
   public updateStatus: UpdateStatus = UpdateStatus.UNKNOWN;
   public UpdateStatus = UpdateStatus; // Make enum available in template
   public versionComparison: VersionComparison | null = null;
-  public showChangelog: boolean = false;
-  public changelog: string = '';
   public currentVersion: string = '';
   public currentWebVersion: string = '';
 
@@ -69,10 +78,22 @@ export class SettingsComponent implements OnInit, OnDestroy {
   private normalizedModel: string = '';
 
   public keepConfigCtrl = new FormControl<boolean>(true);
-  public includePrereleasesCtrl = new FormControl<boolean>(false);
-  public releases$!: Observable<GithubRelease[]>;   // list shown in dropdown
-  public selectedRelease: GithubRelease | null = null;
   private latestStableRelease: GithubRelease | null = null;
+
+  // Update channels: OSM fork (left) and official upstream (middle)
+  public channels: UpdateChannel[] = [
+    {
+      key: 'osm', titleKey: 'UPDATE.RELEASE_AND_UPDATE_OSM',
+      includePrereleasesCtrl: new FormControl<boolean>(false),
+      selectedRelease: null, expectedFactoryFilename: '', showChangelog: false, changelog: ''
+    },
+    {
+      key: 'official', titleKey: 'UPDATE.RELEASE_AND_UPDATE_OFFICIAL',
+      includePrereleasesCtrl: new FormControl<boolean>(false),
+      selectedRelease: null, expectedFactoryFilename: '', showChangelog: false, changelog: ''
+    },
+  ];
+  public activeChannelKey: UpdateRepo | null = null;
 
   constructor(
     private systemService: SystemService,
@@ -109,28 +130,31 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.updateVersionStatus();
       });
 
-    // Build releases$ AFTER info$ is available, and filter by asset existence
-    this.releases$ = combineLatest([
-      this.includePrereleasesCtrl.valueChanges.pipe(startWith(this.includePrereleasesCtrl.value)),
-      this.info$
-    ]).pipe(
-      switchMap(([include]) =>
-        this.githubUpdateService.getReleases(include).pipe(
-          map(list =>
-            (list ?? []).filter(r =>
-              r.assets?.some(a => a.name === this.buildFactoryNameFor(r))
+    // Build per-channel release streams AFTER info$ is available,
+    // filtered by existence of the expected factory asset
+    for (const ch of this.channels) {
+      ch.releases$ = combineLatest([
+        ch.includePrereleasesCtrl.valueChanges.pipe(startWith(ch.includePrereleasesCtrl.value)),
+        this.info$
+      ]).pipe(
+        switchMap(([include]) =>
+          this.githubUpdateService.getReleases(!!include, ch.key).pipe(
+            map(list =>
+              (list ?? []).filter(r =>
+                r.assets?.some(a => a.name === this.buildFactoryNameFor(r))
+              )
             )
           )
-        )
-      ),
-      tap(list => {
-        if (!this.selectedRelease || !list.find(r => r.id === this.selectedRelease!.id)) {
-          this.selectedRelease = list[0] ?? null;
-          this.updateSelectedReleaseDeps();
-        }
-      }),
-      shareReplay({ refCount: true, bufferSize: 1 })
-    );
+        ),
+        tap(list => {
+          if (!ch.selectedRelease || !list.find(r => r.id === ch.selectedRelease!.id)) {
+            ch.selectedRelease = list[0] ?? null;
+            this.updateSelectedReleaseDeps(ch);
+          }
+        }),
+        shareReplay({ refCount: true, bufferSize: 1 })
+      );
+    }
 
 
     this.checkUpdateStatus();
@@ -314,20 +338,20 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.latestStableRelease
       );
     }
-    this.updateSelectedReleaseDeps();
+    this.channels.forEach(ch => this.updateSelectedReleaseDeps(ch));
   }
 
   /** Refresh filename + changelog for the selected release */
-  private updateSelectedReleaseDeps() {
-    if (!this.selectedRelease) {
-      this.expectedFactoryFilename = '';
+  private updateSelectedReleaseDeps(ch: UpdateChannel) {
+    if (!ch.selectedRelease) {
+      ch.expectedFactoryFilename = '';
       return;
     }
-    this.expectedFactoryFilename = this.buildFactoryNameFor(this.selectedRelease);
+    ch.expectedFactoryFilename = this.buildFactoryNameFor(ch.selectedRelease);
 
     // Refresh changelog if panel is open
-    if (this.showChangelog) {
-      this.changelog = this.githubUpdateService.getChangelog(this.selectedRelease);
+    if (ch.showChangelog) {
+      ch.changelog = this.githubUpdateService.getChangelog(ch.selectedRelease);
     }
   }
 
@@ -365,28 +389,27 @@ export class SettingsComponent implements OnInit, OnDestroy {
   /**
    * Toggle changelog visibility
    */
-  public toggleChangelog() {
-    this.showChangelog = !this.showChangelog;
+  public toggleChangelog(ch: UpdateChannel) {
+    ch.showChangelog = !ch.showChangelog;
 
-    if (this.showChangelog && this.selectedRelease) {
-      this.changelog = this.githubUpdateService.getChangelog(this.selectedRelease);
+    if (ch.showChangelog && ch.selectedRelease) {
+      ch.changelog = this.githubUpdateService.getChangelog(ch.selectedRelease);
     }
   }
 
   /**
    * Direct update from GitHub via backend proxy
    */
-  public directUpdateFromGithub() {
-    if (!this.selectedRelease) {
+  public directUpdateFromGithub(ch: UpdateChannel) {
+    if (!ch.selectedRelease) {
       this.toastrService.warning(this.translate.instant('TOAST.NO_RELEASE_INFO'), this.translate.instant('TOAST.WARNING'));
       return;
     }
 
-    const filename = this.expectedFactoryFilename;
+    const filename = ch.expectedFactoryFilename;
     console.log('Looking for file:', filename);
     console.log('Device model:', this.deviceModel);
-    //console.log('Available assets:', this.selectedRelease?.assets?.map(a => a.name) ?? []);
-    const asset = this.githubUpdateService.findAsset(this.selectedRelease, filename);
+    const asset = this.githubUpdateService.findAsset(ch.selectedRelease, filename);
     if (!asset) {
       this.toastrService.danger(`File "${filename}" not found.`, 'Error', { duration: 10000 });
       return;
@@ -404,6 +427,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
           // reset UI states
           this.otaProgress = 0;
           this.isOneClickUpdate = true;
+          this.activeChannelKey = ch.key;
           this.firmwareUpdateProgress = 0;
 
           // kick the backend update
@@ -462,6 +486,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
           // If update is ongoing, (re)start polling
           if (status.pending || status.running) {
             this.isOneClickUpdate = true;
+            if (!this.activeChannelKey) this.activeChannelKey = 'osm';
             this.otaProgress = status.progress;
             this.currentStep = `UPDATE.STEP_${status.step.toUpperCase()}`;
             this.startUpdatePolling();
@@ -477,22 +502,13 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Get filtered assets (only matching factory firmware)
-   */
-  public getFilteredAssets(): any[] {
-    return this.latestStableRelease?.assets?.filter(asset =>
-      asset.name === this.expectedFactoryFilename
-    ) ?? [];
-  }
-
   // settings.component.ts
-  public onSelectReleaseId(id: number) {
-    this.releases$.pipe(take(1)).subscribe(list => {
+  public onSelectReleaseId(ch: UpdateChannel, id: number) {
+    ch.releases$?.pipe(take(1)).subscribe(list => {
       const sel = list.find(r => r.id === id);
       if (sel) {
-        this.selectedRelease = sel;
-        this.updateSelectedReleaseDeps();
+        ch.selectedRelease = sel;
+        this.updateSelectedReleaseDeps(ch);
       }
     });
   }

@@ -65,7 +65,7 @@ NerdaxeGaia::NerdaxeGaia() : NerdAxe() {
     // Served to the browser via the API as `defaultTheme`; the web applies it
     // when there is no valid theme saved in localStorage. (This is the web
     // theme, separate from m_theme above, which is the on-device LCD theme.)
-    m_defaultTheme = "gaia";
+    m_defaultTheme = "dark";   // OSM: einheitlich dunkel wie die uebrigen Boards
 
     m_swarmColorName = "#e7cf00"; // yellow
 

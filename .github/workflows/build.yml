@@ -1,7 +1,12 @@
 name: Build and Release ESP32 Firmware
 
 on:
-  workflow_dispatch:  # Manual trigger only
+  workflow_dispatch:  # Manual trigger
+  release:
+    types: [released]  # Build and attach binaries when a release is published
+
+permissions:
+  contents: write
 
 jobs:
   build-and-release:
@@ -11,48 +16,16 @@ jobs:
     strategy:
       matrix:
         include:
-          - board: NERDQAXEPLUS
-            upload_www: true
-            label: NerdQAxe+
-          - board: NERDOCTAXEPLUS
-            upload_www: false
-            label: NerdOCTAXE+
-          - board: NERDQAXEPLUS2
-            upload_www: false
-            label: NerdQAxe++
-          - board: NERDAXE
-            upload_www: false
-            label: NerdAxe
-          - board: NERDOCTAXEGAMMA
-            upload_www: false
-            label: NerdOCTAXE-Gamma
-          - board: NERDAXEGAMMA
-            upload_www: false
-            label: NerdAxeGamma
           - board: NERDAXEGAIA
-            upload_www: false
+            upload_www: true
             label: NerdAxeGaia
-          - board: NERDHAXEGAMMA
-            upload_www: false
-            label: NerdHaxe-Gamma
-          - board: NERDEKO
-            upload_www: false
-            label: NerdEKO
-          - board: NERDQX
-            upload_www: false
-            label: NerdQX
-          - board: Q1370
-            upload_www: false
-            label: Q1370
-          - board: Q1373
-            upload_www: false
-            label: Q1373
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
         submodules: recursive
+        fetch-depth: 0
 
     - name: Get Version Tag
       id: version_tag
@@ -135,7 +108,7 @@ jobs:
         retention-days: 7
 
     - name: Upload www.bin (only once)
-      if: env.RELEASE_EXISTS == 'false' && matrix.board == 'NERDQAXEPLUS'
+      if: env.RELEASE_EXISTS == 'false' && matrix.upload_www
       uses: actions/upload-artifact@v4
       with:
         name: www.bin

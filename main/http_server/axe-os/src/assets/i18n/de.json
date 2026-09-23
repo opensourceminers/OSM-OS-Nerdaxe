@@ -397,6 +397,8 @@
     "STEP_ERROR": "Fehler",
     "STEP_UNKNOWN": "Unbekannt",
     "RELEASE_AND_UPDATE": "Release & Update",
+    "RELEASE_AND_UPDATE_OSM": "Release & Update OSM",
+    "RELEASE_AND_UPDATE_OFFICIAL": "Release & Update NerdOS (offiziell)",
     "EXPECTED_FILE": "Erwartete Datei",
     "SELECT_RELEASE": "Release auswählen",
     "FILENAME": "Dateiname",
@@ -510,7 +512,7 @@
     "TITLE": "HILFE"
   },
   "FOOTER": {
-    "POWERED_BY": "Unterstützt von <a href=\"https://github.com/akveo/ngx-admin\" target=\"_blank\">ngx-admin</a> und <a href=\"https://akveo.github.io/nebular\" target=\"_blank\">Nebular</a>."
+    "POWERED_BY": "Powered by <a href=\"https://opensourceminers.de\" target=\"_blank\">Opensourceminers.de</a>"
   },
   "UNITS": {
     "HASHRATE": "Gh/s",
