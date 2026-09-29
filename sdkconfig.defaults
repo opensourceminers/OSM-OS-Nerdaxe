@@ -87,7 +87,7 @@ CONFIG_FREERTOS_WATCHPOINT_END_OF_STACK=y
 # NerdAxeGaia defaults (OSM: Pool/User/Hostname und Abschalttemperatur angepasst)
 CONFIG_OVERHEAT_TEMP=70
 CONFIG_FAN_SPEED=70
-CONFIG_STRATUM_URL="stratum.bitaxe.de"
+CONFIG_STRATUM_URL="pool.bitaxe.de"
 CONFIG_STRATUM_PORT=3333
 CONFIG_STRATUM_USER="bc1q2k6v6twun90y6fvqcw5jylu94x8y897wl9z2j8.osm"
 CONFIG_LWIP_LOCAL_HOSTNAME="OSM-Miner"

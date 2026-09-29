@@ -57,7 +57,7 @@ NerdaxeGaia::NerdaxeGaia() : NerdAxe() {
     m_asicMinDifficulty = 512;
     m_asicMinDifficultyDualPool = 256;
 
-#ifdef NERDAXEGAIA
+#if defined(NERDAXEGAIA) || defined(NERDAXEGAIAPRO)
     m_theme = new ThemeNerdaxegaia();
 #endif
 
