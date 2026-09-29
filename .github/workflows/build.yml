@@ -24,6 +24,9 @@ jobs:
           - board: NERDAXEGAIA
             upload_www: true
             label: NerdAxeGaia
+          - board: NERDAXEGAIAPRO
+            upload_www: false
+            label: NerdAxeGaiaPro
 
     steps:
     - name: Checkout repository
