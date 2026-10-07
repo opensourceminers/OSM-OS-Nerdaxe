@@ -15,10 +15,10 @@ NerdaxeGaiaPro::NerdaxeGaiaPro() : NerdaxeGaia()
     // 2-phase VR gives more current headroom: extend the ASIC frequency scale up,
     // bump the default a couple of steps and pair it with a little more core voltage.
     m_asicFrequencies = {300, 320, 340, 350, 360, 380, 400, 420, 440, 460, 480, 500};
-    m_defaultAsicFrequency = m_asicFrequency = 400;
+    m_defaultAsicFrequency = m_asicFrequency = 440;   // OSM: Auslieferungstakt (~3 TH/s)
     m_absMaxAsicFrequency  = 550;   // hard ceiling for manual input
     m_asicVoltages = {900, 920, 940, 960, 980, 1000, 1020, 1040, 1060, 1080};
-    m_defaultAsicVoltageMillis = m_asicVoltageMillis = 960;
+    m_defaultAsicVoltageMillis = m_asicVoltageMillis = 1020;  // OSM: passend zu 440 MHz
 
     // Gauge ceilings for the doubled VR capacity (display only, not a runtime cutoff).
     m_maxPin      = 60.0;
