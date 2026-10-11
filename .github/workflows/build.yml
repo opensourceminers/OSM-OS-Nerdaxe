@@ -35,6 +35,9 @@ jobs:
         submodules: recursive
         fetch-depth: 0
 
+    - name: Check OSM settings
+      run: python3 tools/osm_settings.py --check
+
     - name: Get Version Tag
       id: version_tag
       run: |
