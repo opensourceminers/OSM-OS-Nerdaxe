@@ -26,11 +26,15 @@
   },
   "_devices_comment": [
     "Schluessel = Quelldatei unter main/boards/ ohne Endung.",
-    "Nur Boards dieses Branches - die Gaia-Modelle liegen auf dem Branch osm-gaia.",
     "Gesetzt werden nur Auslieferungstakt und Kernspannung; Regler-, Pin- und",
     "Schutzeinstellungen bleiben unveraendert vom Upstream."
   ],
   "devices": {
+    "nerdaxegaiapro": {
+      "_name": "Nerdaxe Gaia Pro",
+      "frequency": 440,
+      "core_voltage": 1020
+    },
     "nerdaxegamma": {
       "_name": "Nerdaxe Gamma",
       "frequency": 650,

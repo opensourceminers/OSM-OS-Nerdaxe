@@ -72,7 +72,7 @@ NerdaxeGaia::NerdaxeGaia() : NerdAxe() {
     m_asicMinDifficulty = 512;
     m_asicMinDifficultyDualPool = 256;
 
-#ifdef NERDAXEGAIA
+#if defined(NERDAXEGAIA) || defined(NERDAXEGAIAPRO)
     m_theme = new ThemeNerdaxegaia();
 #endif
 
@@ -80,7 +80,7 @@ NerdaxeGaia::NerdaxeGaia() : NerdAxe() {
     // Served to the browser via the API as `defaultTheme`; the web applies it
     // when there is no valid theme saved in localStorage. (This is the web
     // theme, separate from m_theme above, which is the on-device LCD theme.)
-    m_defaultTheme = "gaia";
+    m_defaultTheme = "dark";   // OSM: einheitlich dunkel wie die uebrigen Boards
 
     m_swarmColorName = "#e7cf00"; // yellow
 
@@ -128,17 +128,17 @@ bool NerdaxeGaia::initBoard()
     TPS546_set_vin_config(/*on*/ 10.5f, /*off*/ 9.5f, /*uv_warn*/ 10.5f, /*ov_fault*/ 14.0f);
 
     // Raise the output over-current protection: the shared driver defaults to
-    // 25A warn / 30A fault, which trips around 440MHz @ 1V (~31A). The Gaia's
-    // TPS546D24A is rated 40A, so use a conservative 28A warn / 33A fault.
+    // 25A warn / 30A fault, which trips around 440MHz @ 1V (~31A). The 1-phase Gaia's
+    // TPS546D24A is rated 40A (conservative 28/33); the 2-phase Gaia Pro raises these.
     // Board-specific; must run BEFORE TPS546_init().
-    TPS546_set_iout_config(/*warn*/ 28.0f, /*fault*/ 33.0f);
+    TPS546_set_iout_config(m_tpsOcWarnA, m_tpsOcFaultA);
 
     //Init voltage controller
     if (TPS546_init() != ESP_OK) {
         ESP_LOGE(TAG, "TPS546 init failed!");
         return ESP_FAIL;
     }
-    TPS546_set_frequency(400);
+    TPS546_set_frequency(m_tpsSwitchKHz);
     setVoltage(0.0);
 
     gpio_pad_select_gpio(BM1373_RST_PIN);
