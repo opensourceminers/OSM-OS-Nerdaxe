@@ -72,7 +72,7 @@ def patch_kconfig(cfg, apply_changes):
         text = text[: m.start(2)] + want_fan + text[m.end(2) :]
 
     if drift and apply_changes:
-        KCONFIG.write_text(text, encoding="utf-8", newline="\n")
+        KCONFIG.write_bytes((text).encode("utf-8"))  # LF, auch unter Python 3.9
     return drift
 
 
@@ -106,7 +106,7 @@ def patch_sdkconfig(cfg, apply_changes):
             lines[i] = f"{key}={want}" + (f"   {comment}" if comment else "")
 
     if drift and apply_changes:
-        SDKCONFIG.write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
+        SDKCONFIG.write_bytes(("\n".join(lines) + "\n").encode("utf-8"))  # LF, auch unter Python 3.9
     return drift
 
 
@@ -134,7 +134,7 @@ def patch_board(name, dev, apply_changes):
             text = text[: m.start(2)] + want + text[m.end(2) :]
 
     if drift and apply_changes:
-        path.write_text(text, encoding="utf-8", newline="\n")
+        path.write_bytes((text).encode("utf-8"))  # LF, auch unter Python 3.9
     return drift
 
 
