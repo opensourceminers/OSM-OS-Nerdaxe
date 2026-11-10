@@ -1,12 +1,14 @@
 name: Build and Release ESP32 Firmware
 
 on:
-  workflow_dispatch:  # Manual trigger only
+  workflow_dispatch:  # Manual trigger
     inputs:
       enable_coredump:
         description: 'Diagnostic build: panic core dump capture + download endpoint. Only published to pre-releases (fails for a stable release); otherwise artifacts only. The dump can leak WiFi/pool credentials to anyone on the LAN unless OTP is enabled on the device.'
         type: boolean
         default: false
+  release:
+    types: [released]  # Build and attach binaries when a release is published
 
 permissions:
   contents: write
@@ -52,6 +54,9 @@ jobs:
           - board: NERDAXEGAIA
             upload_www: false
             label: NerdAxeGaia
+          - board: NERDAXEGAIAPRO
+            upload_www: false
+            label: NerdAxeGaiaPro
           - board: NERDHAXEGAMMA
             upload_www: false
             label: NerdHaxe-Gamma
@@ -74,6 +79,9 @@ jobs:
       with:
         submodules: recursive
         fetch-depth: 0
+
+    - name: Check OSM settings
+      run: python3 tools/osm_settings.py --check
 
     # Started from a tag ("Use workflow from" -> Tags), the tag is the version and
     # the release target. Started from a branch, the newest tag reachable from the

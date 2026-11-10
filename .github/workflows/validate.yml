@@ -34,6 +34,8 @@ jobs:
             label: NerdAxeGamma
           - board: NERDAXEGAIA
             label: NerdAxeGaia
+          - board: NERDAXEGAIAPRO
+            label: NerdAxeGaiaPro
           - board: NERDHAXEGAMMA
             label: NerdHaxe-Gamma
           - board: NERDEKO
